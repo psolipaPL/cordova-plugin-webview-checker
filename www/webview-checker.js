@@ -16,6 +16,10 @@ var POSSIBLE_WEBVIEW_ENGINES = {
  * @param {Array<string | number | boolean>} params An array of arguments to pass into the native environment.
  * @param {string} className The service name to call on the native side. This corresponds to a native class.
  */
+
+function WebviewChecker () {
+}
+
 function promisifyCordovaExec(action, params, className) {
   params = params || [];
   className = className || 'WebViewChecker';
@@ -35,7 +39,7 @@ function promisifyCordovaExec(action, params, className) {
  * 
  * @returns {Promise<boolean>}
  */
-function isAndroidWebViewEnabled() {
+WebviewChecker.prototype.isAndroidWebViewEnabled = function () {
   return promisifyCordovaExec('isAppEnabled', ['com.google.android.webview']).catch(function (error) {
     console.warn('[Android Webview Checker]: Error while trying to load information for Android WebView, falling back to "com.android.webview"!');
     return promisifyCordovaExec('isAppEnabled', ['com.android.webview']);
@@ -47,7 +51,7 @@ function isAndroidWebViewEnabled() {
  * 
  * @returns {Promise<{ packageName: string, versionName: string, versionCode: number }>}
  */
-function getAndroidWebViewPackageInfo() {
+WebviewChecker.prototype.getAndroidWebViewPackageInfo = function () {
   return promisifyCordovaExec('getAppPackageInfo', ['com.google.android.webview']).catch(function (error) {
     console.warn('[Android Webview Checker]: Error while trying to load information for Android WebView, falling back to "com.android.webview"!');
     return promisifyCordovaExec('getAppPackageInfo', ['com.android.webview']);
@@ -59,7 +63,7 @@ function getAndroidWebViewPackageInfo() {
  * 
  * @returns {Promise<{ packageName: string, versionName: string, versionCode: number }>}
  */
-function getCurrentWebViewPackageInfo() {
+WebviewChecker.prototype.getCurrentWebViewPackageInfo = function () {
   return promisifyCordovaExec('getCurrentWebViewPackageInfo');
 }
 
@@ -71,7 +75,7 @@ function getCurrentWebViewPackageInfo() {
  * 
  * @returns {Promise<void>}
  */
-function openGooglePlayPage(packageName) {
+WebviewChecker.prototype.openGooglePlayPage = function (packageName) {
   if (typeof packageName == 'string') {
     return promisifyCordovaExec('openGooglePlayPage', [packageName]);
   } else {
@@ -81,10 +85,13 @@ function openGooglePlayPage(packageName) {
   }
 }
 
-module.exports = {
-  POSSIBLE_WEBVIEW_ENGINES: POSSIBLE_WEBVIEW_ENGINES,
-  isAndroidWebViewEnabled: isAndroidWebViewEnabled,
-  getAndroidWebViewPackageInfo: getAndroidWebViewPackageInfo,
-  getCurrentWebViewPackageInfo: getCurrentWebViewPackageInfo,
-  openGooglePlayPage: openGooglePlayPage
+WebviewChecker.install = function() {
+  if(!window.plugins) {
+    window.plugins = {};
+  }
 }
+
+window.plugins.webviewchecker = new WebviewChecker();
+return window.plugins.webviewchecker;
+
+cordova.addConstructor(WebviewChecker.install);

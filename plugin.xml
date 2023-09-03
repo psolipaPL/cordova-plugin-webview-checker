@@ -5,7 +5,7 @@
 <license>MIT</license>
 <author>Attila Olah</author>
 <keywords>android,system,webview,checker</keywords>
-<js-module src="www/webview-checker.js" name="webViewChecker">
+<js-module src="www/webview-checker.js" name="WebviewChecker">
   <clobbers target="window.plugins.webviewchecker" />
 </js-module>
 <platform name="android">

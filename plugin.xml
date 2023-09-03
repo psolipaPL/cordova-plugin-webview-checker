@@ -6,7 +6,7 @@
 <author>Attila Olah</author>
 <keywords>android,system,webview,checker</keywords>
 <js-module src="www/webview-checker.js" name="webViewChecker">
-  <clobbers target="plugins.webViewChecker" />
+  <clobbers target="window.plugins.webviewchecker" />
 </js-module>
 <platform name="android">
   <config-file target="config.xml" parent="/*">

@@ -89,9 +89,10 @@ WebviewChecker.install = function() {
   if(!window.plugins) {
     window.plugins = {};
   }
+  window.plugins.webviewchecker = new WebviewChecker();
+  return window.plugins.webviewchecker;
 }
 
-window.plugins.webviewchecker = new WebviewChecker();
-return window.plugins.webviewchecker;
+
 
 cordova.addConstructor(WebviewChecker.install);
